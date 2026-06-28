@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: 201 100% 13%;
+    --foreground: 0 0% 100%;
+    --muted-foreground: 240 4% 66%;
+    --border: 0 0% 100% / 0.1;
+    --coral: 97 18% 51%;
+    --font-display: 'Instrument Serif', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: hsl(var(--coral) / 0.3); }
+
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%,
+      rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+      rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  @keyframes fade-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-fade-rise { animation: fade-rise 0.8s ease-out both; }
+  .animate-fade-rise-delay { animation: fade-rise 0.8s ease-out 0.2s both; }
+  .animate-fade-rise-delay-2 { animation: fade-rise 0.8s ease-out 0.4s both; }
+
+  .nav-links { display: none; }
+  @media (min-width: 768px) { .nav-links { display: flex; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .animate-fade-rise, .animate-fade-rise-delay, .animate-fade-rise-delay-2 { animation: none !important; }
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="background: transparent; color: hsl(var(--foreground)); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden;">
+
+  <!-- ===== FIXED PAGE-WIDE VIDEO BACKGROUND ===== -->
+  <div style="position: fixed; inset: 0; z-index: -1; overflow: hidden; background: hsl(var(--background));">
+    <video ref="{{ bgVideoRef }}" autoplay="" loop="" muted="" playsinline="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5) saturate(0.85);">
+      <source src="uploads/Woman_working_on_glowing_laptop_202606281236.mp4" type="video/mp4">
+    </video>
+    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, hsl(var(--background) / 0.7), hsl(var(--background) / 0.62) 50%, hsl(var(--background) / 0.78));"></div>
+  </div>
+
+  <!-- ===== STICKY GLASS NAV ===== -->
+  <nav class="liquid-glass" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; border-radius: 0;">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 18px 32px;">
+      <a href="#top" style="font-family: var(--font-display); font-size: 30px; letter-spacing: -0.02em; color: hsl(var(--foreground)); text-decoration: none; line-height: 1;">Divya Sharma</a>
+      <div class="nav-links" style="align-items: center; gap: 32px;">
+        
+        <a href="#about" style="font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; transition: color .2s ease;" style-hover="color: hsl(var(--foreground))">About</a><a href="#experience" style="font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; transition: color .2s ease;" style-hover="color: hsl(var(--foreground))">Experience</a><a href="#projects" style="font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; transition: color .2s ease;" style-hover="color: hsl(var(--foreground))">Projects</a><a href="#skills" style="font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; transition: color .2s ease;" style-hover="color: hsl(var(--foreground))">Skills</a><a href="#education" style="font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; transition: color .2s ease;" style-hover="color: hsl(var(--foreground))">Education</a>
+        
+        
+        <a href="#contact" style="font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; transition: color .2s ease;" style-hover="color: hsl(var(--foreground))">Contact</a>
+      </div>
+      <a href="uploads/Divya_Sharma_Master.pdf" onClick="{{ openResume }}" download="Divya_Sharma_Resume.pdf" class="liquid-glass" style="border-radius: 999px; padding: 10px 24px; font-size: 14px; color: hsl(var(--foreground)); text-decoration: none; transition: transform .2s ease; display: inline-block;" style-hover="transform: scale(1.03)">Resume</a>
+    </div>
+  </nav>
+
+  <!-- ===== SECTION 1: HERO ===== -->
+  <header id="top" style="position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 140px 24px 120px; overflow: hidden;">
+    <video ref="{{ videoRef }}" autoplay="" loop="" muted="" playsinline="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: brightness(0.62) saturate(0.9);">
+      <source src="uploads/Woman_working_on_glowing_laptop_202606281236.mp4" type="video/mp4">
+    </video>
+    <div style="position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, hsl(var(--background) / 0.5), hsl(var(--background) / 0.5) 55%, hsl(var(--background)) 100%);"></div>
+
+    <div style="position: relative; z-index: 2; max-width: 1100px; display: flex; flex-direction: column; align-items: center;">
+      <h1 class="animate-fade-rise" style="font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 9vw, 104px); line-height: 0.95; letter-spacing: -0.025em; margin: 0; max-width: 16ch;">Technical depth meets <em style="font-style: normal; color: hsl(var(--muted-foreground));">product judgment.</em></h1>
+      <p class="animate-fade-rise-delay" style="color: hsl(var(--muted-foreground)); font-size: clamp(16px, 2vw, 19px); line-height: 1.6; max-width: 38rem; margin: 32px 0 0;">I'm Divya — a Technical Product Manager building AI, data, and developer-facing products. I turn engineering depth into tools teams actually adopt.</p>
+      <div class="animate-fade-rise-delay-2" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px; margin-top: 48px;">
+        <a href="#experience" class="liquid-glass" style="border-radius: 999px; padding: 18px 52px; font-size: 16px; color: hsl(var(--foreground)); text-decoration: none; transition: transform .2s ease; display: inline-block;" style-hover="transform: scale(1.03)">View My Work</a>
+        <a href="https://divyaslens.substack.com/" target="_blank" rel="noopener" style="font-size: 16px; color: hsl(var(--muted-foreground)); text-decoration: none; transition: color .2s ease;" style-hover="color: hsl(var(--foreground))">Read my writing →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== SECTION 2: ABOUT ===== -->
+  <section id="about" style="scroll-margin-top: 90px; max-width: 1280px; margin: 0 auto; padding: clamp(96px, 12vw, 128px) 32px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 48px;">
+      <div style="flex: 1 1 220px; min-width: 220px;">
+        <h2 data-reveal="" style="font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 5vw, 52px); line-height: 1; letter-spacing: -0.02em; margin: 0;">About</h2>
+      </div>
+      <div style="flex: 2 1 420px; min-width: 300px; max-width: 42rem;">
+        <p data-reveal="" style="color: hsl(var(--muted-foreground)); font-size: 17px; line-height: 1.7; margin: 0 0 20px;">I started in engineering — System Reliability at Nutanix, ML platforms at Eli Lilly — and moved into product because I wanted to own the <em style="font-style: italic; color: hsl(var(--foreground));">why</em>, not just the how.</p>
+        <p data-reveal="" data-delay="80" style="color: hsl(var(--muted-foreground)); font-size: 17px; line-height: 1.7; margin: 0 0 20px;">Today I'm a Product Manager at Regeneron, where I ship internal tools and platforms that research teams rely on. I pair hands-on technical fluency (Python, SQL, AWS, Kubernetes) with user-centered discovery.</p>
+        <p data-reveal="" data-delay="160" style="color: hsl(var(--muted-foreground)); font-size: 17px; line-height: 1.7; margin: 0 0 28px;">I write about AI and product in plain language on my Substack, <em style="font-style: italic; color: hsl(var(--foreground));">Still Loading</em> — product thinking explained by someone still figuring it out.</p>
+        <div data-reveal="" data-delay="240" style="display: flex; flex-wrap: wrap; gap: 10px;">
+          
+          
+          
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: EXPERIENCE ===== -->
+  
+
+  <!-- ===== SECTION 4: SELECTED WORK ===== -->
+  <section id="experience" style="scroll-margin-top: 90px; max-width: 1100px; margin: 0 auto; padding: clamp(64px, 8vw, 96px) 32px;">
+    <h2 data-reveal="" style="font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 5vw, 52px); line-height: 1; letter-spacing: -0.02em; margin: 0 0 48px;">Experience</h2>
+
+    <!-- CARD 1 -->
+    <article data-reveal="" class="liquid-glass" style="border-radius: 20px; padding: 36px; margin-bottom: 24px;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.05; margin: 0;">Product Manager</h3>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 4px 12px; font-size: 12px; color: hsl(var(--muted-foreground));">Full-time</span>
+        </div>
+        <div style="text-align: right;">
+          <div style="color: #688556; font-size: 15px; font-weight: 500">Regeneron Pharmaceuticals</div>
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: hsl(var(--muted-foreground)); font-size: 13px; margin-top: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>Feb 2026 – Present</div>
+        </div>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; color: hsl(var(--muted-foreground)); margin-bottom: 14px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M8.5 13.7 7 22l5-3 5 3-1.5-8.3"></path></svg>Key Achievements</div>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Automated a data-submission workflow — <span style="color: #688556; font-weight: 500">60%</span> faster, <span style="color: #688556; font-weight: 500">$75K+</span> saved annually</span></li>
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Drove delivery across 3 product streams for a 35-user org — feature delivery <span style="color: #688556; font-weight: 500">32% → 74%</span></span></li>
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Built an impact-vs-effort prioritization framework — doubled active usage <span style="color: #688556; font-weight: 500">35% → 70%</span> (400+ users)</span></li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Product Strategy</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Roadmapping</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Prioritization</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Stakeholder Management</span>
+      </div>
+    </article>
+
+    <!-- CARD 2 -->
+    <article data-reveal="" data-delay="80" class="liquid-glass" style="border-radius: 20px; padding: 36px; margin-bottom: 24px;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.05; margin: 0;">Product Manager</h3>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 4px 12px; font-size: 12px; color: hsl(var(--muted-foreground));">Co-op</span>
+        </div>
+        <div style="text-align: right;">
+          <div style="color: #688556; font-size: 15px; font-weight: 500">Regeneron Pharmaceuticals</div>
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: hsl(var(--muted-foreground)); font-size: 13px; margin-top: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>Jun 2025 – Dec 2025</div>
+        </div>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; color: hsl(var(--muted-foreground)); margin-bottom: 14px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M8.5 13.7 7 22l5-3 5 3-1.5-8.3"></path></svg>Key Achievements</div>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Shipped a real-time analytics dashboard — reporting turnaround cut <span style="color: #688556; font-weight: 500">80%</span></span></li>
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Led full lifecycle of an inventory tool — manual effort down <span style="color: #688556; font-weight: 500">37%</span></span></li>
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Redesigned onboarding &amp; UX — user retention up <span style="color: #688556; font-weight: 500">28%</span></span></li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Product Lifecycle</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Discovery</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Figma</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Data Visualization</span>
+      </div>
+    </article>
+
+    <!-- CARD 3 -->
+    <article data-reveal="" data-delay="80" class="liquid-glass" style="border-radius: 20px; padding: 36px; margin-bottom: 24px;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.05; margin: 0;">Product Analyst</h3>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 4px 12px; font-size: 12px; color: hsl(var(--muted-foreground));">Product Analyst</span>
+        </div>
+        <div style="text-align: right;">
+          <div style="color: #688556; font-size: 15px; font-weight: 500">Eli Lilly</div>
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: hsl(var(--muted-foreground)); font-size: 13px; margin-top: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>Oct 2023 – Jun 2024</div>
+        </div>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; color: hsl(var(--muted-foreground)); margin-bottom: 14px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M8.5 13.7 7 22l5-3 5 3-1.5-8.3"></path></svg>Key Achievements</div>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Deployed an ML analytics platform on AWS — infrastructure costs down <span style="color: #688556; font-weight: 500">30%</span></span></li>
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Orchestrated CI/CD automation with engineering — model release cycles cut <span style="color: #688556; font-weight: 500">60%</span></span></li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Technical Requirements</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">ML Platforms</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Cross-functional Delivery</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">CI/CD</span>
+      </div>
+    </article>
+
+    <!-- CARD 4 -->
+    <article data-reveal="" data-delay="80" class="liquid-glass" style="border-radius: 20px; padding: 36px;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.05; margin: 0;">System Reliability Engineer</h3>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 4px 12px; font-size: 12px; color: hsl(var(--muted-foreground));">Product Specialist</span>
+        </div>
+        <div style="text-align: right;">
+          <div style="color: #688556; font-size: 15px; font-weight: 500">Nutanix</div>
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: hsl(var(--muted-foreground)); font-size: 13px; margin-top: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>Jan 2021 – Oct 2023</div>
+        </div>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; color: hsl(var(--muted-foreground)); margin-bottom: 14px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M8.5 13.7 7 22l5-3 5 3-1.5-8.3"></path></svg>Key Achievements</div>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Influenced a <span style="color: #688556; font-weight: 500">22%</span> adoption lift for Prism Central via customer &amp; usage insights</span></li>
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Synthesized <span style="color: #688556; font-weight: 500">600+</span> enterprise cases into impact-ranked roadmap input</span></li>
+          <li style="display: flex; gap: 12px; font-size: 15px; line-height: 1.55;"><span style="color: hsl(var(--coral)); flex-shrink: 0;">-&gt;</span><span>Led cross-stack joint fixes with VMware, Citrix &amp; Microsoft engineering teams</span></li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Customer Insights</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Roadmap Influence</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Technical Troubleshooting</span>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Cross-vendor Coordination</span>
+      </div>
+    </article>
+  </section><section id="projects" style="scroll-margin-top: 90px; max-width: 1100px; margin: 0 auto; padding: clamp(64px, 8vw, 96px) 32px;">
+    <h2 data-reveal="" style="font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 5vw, 52px); line-height: 1; letter-spacing: -0.02em; margin: 0 0 48px;">Projects&nbsp;</h2>
+
+    <!-- FEATURED -->
+    <article data-reveal="" class="liquid-glass" style="border-radius: 20px; padding: 40px; margin-bottom: 24px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <h3 style="font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.05; margin: 0;">Cartographer</h3>
+        <span class="liquid-glass" style="border-radius: 999px; padding: 5px 14px; font-size: 12px; color: #688556">In Development</span>
+      </div>
+      <p style="color: hsl(var(--muted-foreground)); font-size: 17px; line-height: 1.65; margin: 0 0 24px; max-width: 60ch;">An AI intelligence layer that lets data consumers navigate data lakes and self-serve technical requirements without engineering help. Validated through discovery with 5 onboarded BAs/PMs; authoring the BRD &amp; PRD.</p>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">AI Product</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Discovery</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">Data</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 6px 14px; font-size: 12px; color: hsl(var(--muted-foreground));">0-to-1</span>
+        </div>
+        <a href="#" style="font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: all .2s ease; display: inline-block;" style-hover="color: hsl(var(--coral)); transform: scale(1.04)">View →</a>
+      </div>
+    </article>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+      <!-- PROJECT 2 -->
+      <article data-reveal="" data-delay="80" class="liquid-glass" style="border-radius: 20px; padding: 32px; display: flex; flex-direction: column;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.1; margin: 0;">AutoCook: A Product Roadmap</h3>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 4px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Academic · Duke</span>
+        </div>
+        <p style="color: hsl(var(--muted-foreground)); font-size: 15px; line-height: 1.6; margin: 0 0 20px; flex-grow: 1;">Spearheaded product strategy for an AI-powered cooking appliance — using market research, competitor analysis, and user profiling to define differentiators and sharpen product-market fit.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Product Strategy</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Market Research</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Consumer Hardware</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">0-to-1</span>
+        </div>
+        <a href="https://www.canva.com/design/DAGdblLSqOc/fsivy_Yly4cFkX5oGjGJkg/view" target="_blank" rel="noopener" style="font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: all .2s ease; align-self: flex-start;" style-hover="color: hsl(var(--coral)); transform: scale(1.04)">View →</a>
+      </article>
+
+      <!-- PROJECT 3 -->
+      <article data-reveal="" data-delay="160" class="liquid-glass" style="border-radius: 20px; padding: 32px; display: flex; flex-direction: column;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.1; margin: 0;">Future Pathway for Netflix</h3>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 4px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Academic · Duke</span>
+        </div>
+        <p style="color: hsl(var(--muted-foreground)); font-size: 15px; line-height: 1.6; margin: 0 0 20px; flex-grow: 1;">Synthesized Netflix's competitive landscape through market and scenario analysis, translating insights into a phased growth strategy.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Competitive Strategy</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Scenario Analysis</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Consumer Tech</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Roadmapping</span>
+        </div>
+        <a href="https://www.canva.com/design/DAGkk1fsUGo/L6g1dhieB6Z5bSWmfqwZBg/view" target="_blank" rel="noopener" style="font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: all .2s ease; align-self: flex-start;" style-hover="color: hsl(var(--coral)); transform: scale(1.04)">View →</a>
+      </article>
+
+      <!-- PROJECT 4 -->
+      <article data-reveal="" data-delay="240" class="liquid-glass" style="border-radius: 20px; padding: 32px; display: flex; flex-direction: column;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.1; margin: 0;">Naitiv AI</h3><span class="liquid-glass" style="border-radius: 999px; padding: 4px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Product Consulting</span>
+          
+        </div>
+        
+        <p style="color: hsl(var(--muted-foreground)); font-size: 15px; line-height: 1.6; margin: 0 0 20px; flex-grow: 1;">Assessed product-market fit through 120+ user interviews and journey mapping; delivered GTM recommendations that shaped MVP scope and value proposition.</p><div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Discovery</span><span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">Design Thinking</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">User Research</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 5px 12px; font-size: 11px; color: hsl(var(--muted-foreground));">GTM</span>
+        </div>
+        <a href="https://www.canva.com/design/DAGdbleNLpA/IM4KfObdzl5sVOda1lGbwQ/view" target="_blank" rel="noopener" style="font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: all .2s ease; align-self: flex-start;" style-hover="color: hsl(var(--coral)); transform: scale(1.04)">View →</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5: SKILLS ===== -->
+  <section id="skills" style="scroll-margin-top: 90px; max-width: 1100px; margin: 0 auto; padding: clamp(64px, 8vw, 96px) 32px;">
+    <h2 data-reveal="" style="font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 5vw, 52px); line-height: 1; letter-spacing: -0.02em; margin: 0 0 48px;">Skills</h2>
+    <div style="display: flex; flex-direction: column; gap: 36px;">
+      <div data-reveal="">
+        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: #688556; margin-bottom: 16px; font-weight: 600">Product</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Product Strategy</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Roadmapping</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Discovery &amp; User Research</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Prioritization</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Agile/Scrum (SAFe)</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Stakeholder Management</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">GTM</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">A/B Testing</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Product Launch</span>
+        </div>
+      </div>
+      <div data-reveal="" data-delay="80">
+        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: #688556; margin-bottom: 16px; font-weight: 600">Technical &amp; Infrastructure</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Python</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">SQL</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Docker</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Kubernetes</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">CI/CD (Jenkins)</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Git</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">AWS</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Azure</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Distributed Systems</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">REST APIs</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Data Pipelines</span>
+        </div>
+      </div>
+      <div data-reveal="" data-delay="160">
+        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: #688556; margin-bottom: 16px; font-weight: 600">AI</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Generative AI (Claude, Copilot)</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">AI Build Tools (Cursor, Lovable, v0)</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Prompt Engineering</span>
+        </div>
+      </div>
+      <div data-reveal="" data-delay="240">
+        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: #688556; margin-bottom: 16px; font-weight: 600">Tools</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Tableau</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Power BI</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Jira</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Confluence</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">Figma</span>
+          <span class="liquid-glass" style="border-radius: 999px; padding: 8px 16px; font-size: 13px; color: hsl(var(--foreground));">LucidChart</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 6: EDUCATION ===== -->
+  <section id="education" style="scroll-margin-top: 90px; max-width: 1100px; margin: 0 auto; padding: clamp(64px, 8vw, 96px) 32px;">
+    <h2 data-reveal="" style="font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 5vw, 52px); line-height: 1; letter-spacing: -0.02em; margin: 0 0 48px;">Education</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+      <article data-reveal="" class="liquid-glass" style="border-radius: 20px; padding: 36px;">
+        <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.05; margin: 0 0 6px;">Duke University</h3>
+        <div style="color: hsl(var(--muted-foreground)); font-size: 15px; margin-bottom: 4px;">M.Eng., Engineering Management</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: hsl(var(--muted-foreground)); font-size: 13px; margin-bottom: 20px;"><span style="color: #688556; font-weight: 500">GPA 3.9</span><span>·</span><span>Aug 2024 – Dec 2025</span></div>
+        <div style="color: hsl(var(--foreground)); font-size: 14px; line-height: 1.6; margin-bottom: 8px;"><span style="color: #688556; font-weight: 500">Winner</span>, Duke MEM Executive Challenge (150+ participants)</div>
+        <div style="color: hsl(var(--muted-foreground)); font-size: 14px; line-height: 1.6;">Coursework: Product Management, Competitive Strategy, Design Thinking, Marketing Strategy, Finance.</div>
+      </article>
+      <article data-reveal="" data-delay="80" class="liquid-glass" style="border-radius: 20px; padding: 36px;">
+        <h3 style="font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.05; margin: 0 0 6px;">VIT University</h3>
+        <div style="color: hsl(var(--muted-foreground)); font-size: 15px; margin-bottom: 4px;">B.Tech., Computer Science Engineering</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: hsl(var(--muted-foreground)); font-size: 13px;"><span style="color: #688556; font-weight: 500">GPA 3.8</span><span>·</span><span>2017 – 2021</span></div>
+        <div style="color: hsl(var(--muted-foreground)); font-size: 14px; line-height: 1.6; margin-top: 20px;">Coursework: Artificial Intelligence, Cyber Security, Virtualization, Software Engineering.</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 7: CONTACT / FOOTER ===== -->
+  <footer id="contact" style="scroll-margin-top: 90px; max-width: 900px; margin: 0 auto; padding: clamp(96px, 14vw, 160px) 32px 64px; text-align: center;">
+    <h2 data-reveal="" style="font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 9vw, 88px); line-height: 1; letter-spacing: -0.025em; margin: 0;">Let's connect.</h2>
+    <p data-reveal="" data-delay="80" style="color: hsl(var(--muted-foreground)); font-size: clamp(16px, 2vw, 19px); line-height: 1.6; max-width: 34rem; margin: 24px auto 0;">Open to Technical PM roles in AI, data, and developer-facing products.</p>
+    <div data-reveal="" data-delay="160" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; margin-top: 48px;">
+      <a href="mailto:divyasharma230499@gmail.com" class="liquid-glass" style="border-radius: 999px; padding: 14px 28px; font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: transform .2s ease; display: inline-block;" style-hover="transform: scale(1.03)">Email</a>
+      <a href="https://linkedin.com/in/divya234" target="_blank" rel="noopener" class="liquid-glass" style="border-radius: 999px; padding: 14px 28px; font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: transform .2s ease; display: inline-block;" style-hover="transform: scale(1.03)">LinkedIn</a>
+      <a href="https://divyaslens.substack.com/" target="_blank" rel="noopener" class="liquid-glass" style="border-radius: 999px; padding: 14px 28px; font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: transform .2s ease; display: inline-block;" style-hover="transform: scale(1.03)">Substack</a>
+      <a href="uploads/Divya_Sharma_Master.pdf" onClick="{{ openResume }}" download="Divya_Sharma_Resume.pdf" class="liquid-glass" style="border-radius: 999px; padding: 14px 28px; font-size: 15px; color: hsl(var(--foreground)); text-decoration: none; transition: transform .2s ease; display: inline-block;" style-hover="transform: scale(1.03)">Resume</a>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 96px; color: hsl(var(--muted-foreground)); font-size: 13px;">
+      <span>© 2026 Divya Sharma</span>
+      <span style="opacity: 0.5;">·</span>
+      <span style="opacity: 0.7;">Built with care.</span>
+    </div>
+  </footer>
+
+</div>
+
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <rect width="100" height="100" fill="hsl(201,100%,13%)"></rect>
+    <text x="50" y="50" dy="0.36em" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#688556">DS</text>
+  </svg>
+</template></x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  videoRef = React.createRef();
+  bgVideoRef = React.createRef();
+
+  componentDidMount() {
+    this.applyMute();
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    [this.videoRef.current, this.bgVideoRef.current].forEach(v => {
+      if (reduce && v) {
+        try { v.pause(); } catch (e) {}
+        v.removeAttribute('autoplay');
+      }
+    });
+    if (reduce) return;
+
+    const root = this.rootRef.current;
+    if (!root || !('IntersectionObserver' in window)) return;
+
+    const els = Array.from(root.querySelectorAll('[data-reveal]'));
+    els.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.willChange = 'opacity, transform';
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const d = el.getAttribute('data-delay') || '0';
+          el.style.transition = 'opacity .8s ease-out ' + d + 'ms, transform .8s ease-out ' + d + 'ms';
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+    els.forEach(el => io.observe(el));
+  }
+
+  applyMute() {
+    const root = this.rootRef.current;
+    const vids = root ? Array.from(root.querySelectorAll('video')) : [];
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    vids.forEach(v => {
+      v.muted = true;
+      v.volume = 0;
+      v.setAttribute('muted', '');
+      v.loop = true;
+      v.setAttribute('loop', '');
+      if (!v.__mutedGuard) {
+        v.__mutedGuard = true;
+        const force = () => { if (!v.muted || v.volume !== 0) { v.muted = true; v.volume = 0; } };
+        ['volumechange', 'play', 'playing', 'loadeddata'].forEach(ev => v.addEventListener(ev, force));
+        const keepPlaying = () => {
+          if (reduce) return;
+          if (v.currentTime >= (v.duration || Infinity) - 0.05) v.currentTime = 0;
+          const p = v.play();
+          if (p && p.catch) p.catch(() => {});
+        };
+        ['ended', 'pause', 'stalled', 'suspend'].forEach(ev => v.addEventListener(ev, keepPlaying));
+      }
+    });
+  }
+
+  componentDidUpdate() {
+    this.applyMute();
+  }
+
+  openResume = (e) => {
+    if (e) e.preventDefault();
+    const path = 'uploads/Divya_Sharma_Master.pdf';
+    const filename = 'Divya_Sharma_Resume.pdf';
+    fetch(path)
+      .then(r => { if (!r.ok) throw new Error('fetch failed'); return r.blob(); })
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      })
+      .catch(() => {
+        const a = document.createElement('a');
+        a.href = path;
+        a.download = filename;
+        a.click();
+      });
+  };
+
+  renderVals() {
+    return { rootRef: this.rootRef, videoRef: this.videoRef, bgVideoRef: this.bgVideoRef, openResume: this.openResume };
+  }
+}
+</script>
+</body>
+</html>
